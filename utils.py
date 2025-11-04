@@ -13,8 +13,6 @@ def get_thb_exchange_rate():
     except:
         return 32.4 #default fallback exchange rate
 
-
-
 def beautifulize(dict_result, name):
     return pd.Series(dict_result, name=name.replace("_", " ").title()).astype(int)
 
@@ -99,6 +97,7 @@ def create_sliders_from_csv(df, currency_code, convert_input, conversion_rate):
     Returns:
     - dict: Parameter values keyed by "{Section}_{Subsection}_{Variable name}"
     """
+
 
     params = {}
     
