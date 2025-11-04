@@ -8,6 +8,7 @@ from streamlit_echarts import JsCode
 
 from utils import format_large_number
 from utils import format_large_number_long
+from utils import format_large_number_long_plain
 
 #COLOURS
 # Teal #00636b
@@ -24,7 +25,7 @@ from utils import format_large_number_long
 def display_cost_overview(parameters: Dict[str, Any]):
 
     #total_cost_in_billion = (parameters["Total cost"] / 1000000000) * parameters["conversion_rate"]
-    total_cost = format_large_number_long(parameters["Total cost"] * parameters["conversion_rate"])
+    total_cost = format_large_number_long_plain(parameters["Total cost"] * parameters["conversion_rate"])
     mother_percentage = (parameters["Total cost women"] / parameters["Total cost"]) * 100
     child_percentage = (parameters["Total cost children"] / parameters["Total cost"]) * 100
 

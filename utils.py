@@ -67,6 +67,26 @@ def format_large_number_long(number: float, currency: str = "$") -> str:
     return formatted
 
 
+def format_large_number_long_plain(number: float, currency: str = "$") -> str:
+    abs_number = abs(number)
+
+    if abs_number >= 1e12:
+        formatted = f"{abs_number/1e12:.3g} Trillion"
+    elif abs_number >= 1e9:
+        formatted = f"{abs_number/1e9:.3g} Billion"
+    elif abs_number >= 1e6:
+        formatted = f"{abs_number/1e6:.3g} Million"
+    elif abs_number >= 1e3:
+        formatted = f"{abs_number/1e3:.3g} thousand"
+    else:
+        formatted = f"{abs_number:.3g}"
+
+    # Remove trailing zeros after the decimal point
+    formatted = formatted.rstrip("0").rstrip(".") if "." in formatted else formatted
+
+    return formatted
+
+
 def check_admin_access() -> bool:
     is_admin = st.sidebar.checkbox("Are you an admin?")
     if is_admin:
