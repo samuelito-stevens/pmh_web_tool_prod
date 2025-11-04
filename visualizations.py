@@ -413,9 +413,8 @@ def render_costs_barchart_2_inside_right(parameters: Dict[str, float]):
                     {
                         "value": hospital_cost_child, 
                         "itemStyle": {"color":"#00C3BB"},
-                        "label": {"show": True, "position": "insideRight", "formatter": f"{100}% Child",
-                                  "fontSize": 13,
-                                  "color": "#fff"}
+                        "label": {"show": True, "position": "Right", "formatter": f"{100}% Child",
+                                  "fontSize": 13,}
                         },
                     {
                         "value": income_loss_child, 
