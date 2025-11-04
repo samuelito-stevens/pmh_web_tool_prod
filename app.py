@@ -115,7 +115,7 @@ else:
     convert_input = True
 
 df = load_data()
-parameters = create_sliders_from_csv(df, currency_code, convert_input, conversion_rate)
+parameters = create_sliders_from_csv(df, currency_symbol, convert_input, conversion_rate)
 parameters = perform_computations(parameters, currency_symbol, currency_code, conversion_rate)
 
 
