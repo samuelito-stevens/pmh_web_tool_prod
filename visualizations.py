@@ -97,6 +97,7 @@ def render_cost_types_piechart(parameters: Dict[str, float]):
                 "type": "pie",
                 "radius": "55%",
                 "center": ["48%", "50%"],
+                "silent": True,
                 "data": [
                     {"value": dalys,
                         "name": f"Quality of life losses:\n{{bold|{formatted_dalys}}} ({round(dalys / total_cost * 100)}%)",
@@ -126,6 +127,9 @@ def render_cost_types_piechart(parameters: Dict[str, float]):
                         }
                     }
                 ],
+                "emphasis": {
+                    "disabled": True  # Add this to disable hover emphasis effects
+                },
                 "label": {
                     "fontSize": 24,
                     "lineHeight": 26,
@@ -166,7 +170,8 @@ def render_cost_types_piechart(parameters: Dict[str, float]):
     )
 
 
-    
+
+
 def render_costs_barchart_2(parameters: Dict[str, float]):
 
     # Health-related quality of life losses
@@ -199,6 +204,19 @@ def render_costs_barchart_2(parameters: Dict[str, float]):
         "}"
     ).js_code
 
+    # Calculate percentages for each bar
+    hospital_mother_pct = 0  # Since hospital_cost_mother is 0
+    hospital_child_pct = round(hospital_cost_child / total_cost * 100)
+    income_mother_pct = round(income_loss_mother / total_cost * 100)
+    income_child_pct = round(income_loss_child / total_cost * 100)
+    dalys_mother_pct = round(dalys_mother / total_cost * 100)
+    dalys_child_pct = round(dalys_child / total_cost * 100)
+
+    print(hospital_child_pct)
+
+    # Set a threshold (e.g., if bar is less than 15% of the stack, position outside)
+    threshold = 6
+
     options_multiple_stacks = {
         "toolbox": {
             "right": "5%",
@@ -226,7 +244,7 @@ def render_costs_barchart_2(parameters: Dict[str, float]):
                   },
         "yAxis": {
             "type": "category",
-            "data": ["Healthcare costs", "Productivity losses", "Health-related\nquality of life losses"],
+            "data": ["Healthcare costs", "Productivity losses", "Quality of life losses"],
             "axisLabel": {
                 "fontSize": 16,
                 "margin": 20,  # Distance from axis line to labels (default is 8)
@@ -244,24 +262,33 @@ def render_costs_barchart_2(parameters: Dict[str, float]):
                 "name": "Mother",
                 "type": "bar",
                 "stack": "mother",
+                "silent": True,
                 "data": [
                     {
                         "value": hospital_cost_mother, 
                         "itemStyle": {"color":"#00C3BB"},
-                        #"label": {"show": True, "position": "right", "formatter": f"{0}% Mother"}
+                        "label": {"show": True, 
+                                  "position": "right" if hospital_mother_pct < threshold else "insideRight",
+                                  "formatter": f"{0}% Mother *",
+                                  "color": "#fff" if hospital_mother_pct >= threshold else "#000"}
                         },
                     {
                         "value": income_loss_mother, 
                         "itemStyle": {"color": "#63295c"},
-                        "label": {"show": True, "position": "right", 
+                        "label": {"show": True, 
+                                  "position": "right" if income_mother_pct < threshold else "insideRight", 
                                   "formatter": f"{round(income_loss_mother / income_loss * 100)}% Mother",
-                                  "fontSize": 13}
+                                  "fontSize": 13,
+                                  "color": "#fff" if income_mother_pct >= threshold else "#000"}
                         },
                     {
                         "value": dalys_mother,
                         "itemStyle": {"color": "#00636b"}, 
-                        "label": {"show": True, "position": "right", "formatter": f"{round(dalys_mother / dalys * 100)}% Mother",
-                                  "fontSize": 13}
+                        "label": {"show": True,
+                                   "position": "right" if dalys_mother_pct < threshold else "insideRight", 
+                                   "formatter": f"{round(dalys_mother / dalys * 100)}% Mother",
+                                  "fontSize": 13,
+                                  "color": "#fff" if dalys_mother_pct >= threshold else "#000"}
                         }
                     ],
                 
@@ -270,25 +297,34 @@ def render_costs_barchart_2(parameters: Dict[str, float]):
                 "name": "Child",
                 "type": "bar",
                 "stack": "child",
+                "silent": True,
                 "data": [
                     {
                         "value": hospital_cost_child, 
                         "itemStyle": {"color":"#00C3BB"},
-                        "label": {"show": True, "position": "right", "formatter": f"{100}% Child",
-                                  "fontSize": 13}
+                        "label": {"show": True,
+                                  "position": "right" if hospital_child_pct < threshold else "insideRight",
+                                  "formatter": f"{100}% Child",
+                                  "fontSize": 13,
+                                  "color": "#fff" if hospital_child_pct >= threshold else "#000"}
                         },
                     {
                         "value": income_loss_child, 
                         "itemStyle": {"color": "#63295c"},
-                        "label": {"show": True, "position": "right",
+                        "label": {"show": True,
+                                   "position": "right" if income_child_pct < threshold else "insideRight",
                                    "formatter": f"{round(income_loss_child / income_loss * 100)}% Child",
-                                   "fontSize": 13}
+                                   "fontSize": 13,
+                                   "color": "#fff" if income_child_pct >= threshold else "#000"}
                         },
                     {
                         "value": dalys_child,
                         "itemStyle": {"color": "#00636b"},
-                        "label": {"show": True, "position": "right", "formatter": f"{round(dalys_child / dalys * 100)}% Child",
-                                  "fontSize": 13}
+                        "label": {"show": True,
+                                  "position": "right" if dalys_child_pct < threshold else "insideRight",
+                                  "formatter": f"{round(dalys_child / dalys * 100)}% Child",
+                                  "fontSize": 13,
+                                  "color": "#fff" if dalys_child_pct >= threshold else "#000"}
                         }
                     ]
             },
@@ -300,283 +336,4 @@ def render_costs_barchart_2(parameters: Dict[str, float]):
         height="400px",
         renderer="svg")
     
-
-
-
-
-def render_costs_barchart_2_inside_right(parameters: Dict[str, float]):
-
-    # Health-related quality of life losses
-    dalys = round(parameters["Total DALYs, in USD"] * parameters["conversion_rate"])
-    dalys_mother = round(parameters["DALYs women, in USD"] * parameters["conversion_rate"])
-    dalys_child = round(parameters["DALYs children, in USD"] * parameters["conversion_rate"])
-    dalys_mother_depressed = round(parameters["DALYs women depressed, in USD"] * parameters["conversion_rate"])
-    dalys_mother_anxious = round(parameters["DALYs women anxious, in USD"] * parameters["conversion_rate"])
-    dalys_mother_suicide = round(parameters["DALYs women committing suicide ante and postnatal, in USD"] * parameters["conversion_rate"])
-
-    # Productivity losses
-    income_loss = round(parameters["Total income loss"] * parameters["conversion_rate"])
-    income_loss_mother = round(parameters["Income loss women"] * parameters["conversion_rate"])
-    income_loss_child = round(parameters["Income loss children"] * parameters["conversion_rate"])
-    income_loss_mother_depressed = round(parameters["Income loss women depression"] * parameters["conversion_rate"])
-    income_loss_mother_anxious = round(parameters["Income loss women anxiety"] * parameters["conversion_rate"])
-
-    # Healthcare costs
-    hospital_cost_mother = 0
-    hospital_cost_child = round(parameters["Hospital cost children"] * parameters["conversion_rate"])
-
-    total_cost = round(parameters["Total cost"] * parameters["conversion_rate"])
-
-    js_formatter = JsCode(
-        "function (value) {"
-        " if (value >= 1e9) return (value / 1e9).toFixed(0) + 'B';"
-        " if (value >= 1e6) return (value / 1e6).toFixed(0) + 'M';"
-        " if (value >= 1e3) return (value / 1e3).toFixed(0) + 'K';"
-        " return value;"
-        "}"
-    ).js_code
-
-    options_multiple_stacks = {
-        "toolbox": {
-            "right": "5%",
-            "feature": {
-                "saveAsImage": {
-                    "show": True,
-                    "title": "Download",
-                    "name": "cost-breakdown-barchart",
-                    "pixelRatio": 2,
-                    "backgroundColor": "#fff"
-                }
-            }
-        },
-        "tooltip": {"trigger": "axis", "axisPointer": {"type": "shadow"}, "show": False},
-        "legend": {"show": False},  # Hide the legend
-        #"legend": {"data": ["Mother Direct", "Mother Indirect", "Child Acute", "Child Chronic"]},
-        "grid": {"left": "3%", "right": "8%", "bottom": "8%", "top": "0%", "containLabel": True},
-        "xAxis": {"type": "value",
-                  "name": parameters["currency_code"],
-                  "nameLocation": "middle",
-                  "nameGap": 30,
-                  "axisLabel": {
-                      "formatter": js_formatter
-                      }
-                  },
-        "yAxis": {
-            "type": "category",
-            "data": ["Healthcare costs", "Productivity losses", "Health-related\nquality of life losses"],
-            "axisLabel": {
-                "fontSize": 16,
-                "margin": 20,  # Distance from axis line to labels (default is 8)
-                "align": "right",  # Align text to the right
-                "verticalAlign": "middle"
-            },
-            "axisLine": {
-                "show": True,
-                "lineStyle": {"color": "#333"}
-            },
-            "z": 10
-            },
-        "series": [
-            {
-                "name": "Mother",
-                "type": "bar",
-                "stack": "mother",
-                "data": [
-                    {
-                        "value": hospital_cost_mother, 
-                        "itemStyle": {"color":"#00C3BB"},
-                        #"label": {"show": True, "position": "right", "formatter": f"{0}% Mother"}
-                        },
-                    {
-                        "value": income_loss_mother, 
-                        "itemStyle": {"color": "#63295c"},
-                        "label": {"show": True, "position": "insideRight", 
-                                  "formatter": f"{round(income_loss_mother / income_loss * 100)}% Mother",
-                                  "fontSize": 13,
-                                  "color": "#fff"}
-                        },
-                    {
-                        "value": dalys_mother,
-                        "itemStyle": {"color": "#00636b"}, 
-                        "label": {"show": True, "position": "insideRight", "formatter": f"{round(dalys_mother / dalys * 100)}% Mother",
-                                  "fontSize": 13,
-                                  "color": "#fff"}
-                        }
-                    ],
-                
-            },
-            {
-                "name": "Child",
-                "type": "bar",
-                "stack": "child",
-                "data": [
-                    {
-                        "value": hospital_cost_child, 
-                        "itemStyle": {"color":"#00C3BB"},
-                        "label": {"show": True, "position": "right", "formatter": f"{100}% Child",
-                                  "fontSize": 13,}
-                        },
-                    {
-                        "value": income_loss_child, 
-                        "itemStyle": {"color": "#63295c"},
-                        "label": {"show": True, "position": "insideRight",
-                                   "formatter": f"{round(income_loss_child / income_loss * 100)}% Child",
-                                   "fontSize": 13,
-                                   "color": "#fff"}
-                        },
-                    {
-                        "value": dalys_child,
-                        "itemStyle": {"color": "#00636b"},
-                        "label": {"show": True, "position": "insideRight", "formatter": f"{round(dalys_child / dalys * 100)}% Child",
-                                  "fontSize": 13,
-                                  "color": "#fff"}
-                        }
-                    ]
-            },
-        ]
-    }
-
-    st_echarts(
-        options=options_multiple_stacks,
-        height="400px",
-        renderer="svg")
-    
-
-
-def render_costs_barchart_2_inside_left(parameters: Dict[str, float]):
-
-    # Health-related quality of life losses
-    dalys = round(parameters["Total DALYs, in USD"] * parameters["conversion_rate"])
-    dalys_mother = round(parameters["DALYs women, in USD"] * parameters["conversion_rate"])
-    dalys_child = round(parameters["DALYs children, in USD"] * parameters["conversion_rate"])
-    dalys_mother_depressed = round(parameters["DALYs women depressed, in USD"] * parameters["conversion_rate"])
-    dalys_mother_anxious = round(parameters["DALYs women anxious, in USD"] * parameters["conversion_rate"])
-    dalys_mother_suicide = round(parameters["DALYs women committing suicide ante and postnatal, in USD"] * parameters["conversion_rate"])
-
-    # Productivity losses
-    income_loss = round(parameters["Total income loss"] * parameters["conversion_rate"])
-    income_loss_mother = round(parameters["Income loss women"] * parameters["conversion_rate"])
-    income_loss_child = round(parameters["Income loss children"] * parameters["conversion_rate"])
-    income_loss_mother_depressed = round(parameters["Income loss women depression"] * parameters["conversion_rate"])
-    income_loss_mother_anxious = round(parameters["Income loss women anxiety"] * parameters["conversion_rate"])
-
-    # Healthcare costs
-    hospital_cost_mother = 0
-    hospital_cost_child = round(parameters["Hospital cost children"] * parameters["conversion_rate"])
-
-    total_cost = round(parameters["Total cost"] * parameters["conversion_rate"])
-
-    js_formatter = JsCode(
-        "function (value) {"
-        " if (value >= 1e9) return (value / 1e9).toFixed(0) + 'B';"
-        " if (value >= 1e6) return (value / 1e6).toFixed(0) + 'M';"
-        " if (value >= 1e3) return (value / 1e3).toFixed(0) + 'K';"
-        " return value;"
-        "}"
-    ).js_code
-
-    options_multiple_stacks = {
-        "toolbox": {
-            "right": "5%",
-            "feature": {
-                "saveAsImage": {
-                    "show": True,
-                    "title": "Download",
-                    "name": "cost-breakdown-barchart",
-                    "pixelRatio": 2,
-                    "backgroundColor": "#fff"
-                }
-            }
-        },
-        "tooltip": {"trigger": "axis", "axisPointer": {"type": "shadow"}, "show": False},
-        "legend": {"show": False},  # Hide the legend
-        #"legend": {"data": ["Mother Direct", "Mother Indirect", "Child Acute", "Child Chronic"]},
-        "grid": {"left": "3%", "right": "8%", "bottom": "8%", "top": "0%", "containLabel": True},
-        "xAxis": {"type": "value",
-                  "name": parameters["currency_code"],
-                  "nameLocation": "middle",
-                  "nameGap": 30,
-                  "axisLabel": {
-                      "formatter": js_formatter
-                      }
-                  },
-        "yAxis": {
-            "type": "category",
-            "data": ["Healthcare costs", "Productivity losses", "Health-related\nquality of life losses"],
-            "axisLabel": {
-                "fontSize": 16,
-                "margin": 20,  # Distance from axis line to labels (default is 8)
-                "align": "right",  # Align text to the right
-                "verticalAlign": "middle"
-            },
-            "axisLine": {
-                "show": True,
-                "lineStyle": {"color": "#333"}
-            },
-            "z": 10
-            },
-        "series": [
-            {
-                "name": "Mother",
-                "type": "bar",
-                "stack": "mother",
-                "data": [
-                    {
-                        "value": hospital_cost_mother, 
-                        "itemStyle": {"color":"#00C3BB"},
-                        #"label": {"show": True, "position": "right", "formatter": f"{0}% Mother"}
-                        },
-                    {
-                        "value": income_loss_mother, 
-                        "itemStyle": {"color": "#63295c"},
-                        "label": {"show": True, "position": "insideLeft", 
-                                  "formatter": f"{round(income_loss_mother / income_loss * 100)}% Mother",
-                                  "fontSize": 13,
-                                  "color": "#fff"}
-                        },
-                    {
-                        "value": dalys_mother,
-                        "itemStyle": {"color": "#00636b"}, 
-                        "label": {"show": True, "position": "insideLeft", "formatter": f"{round(dalys_mother / dalys * 100)}% Mother",
-                                  "fontSize": 13,
-                                  "color": "#fff"}
-                        }
-                    ],
-                
-            },
-            {
-                "name": "Child",
-                "type": "bar",
-                "stack": "child",
-                "data": [
-                    {
-                        "value": hospital_cost_child, 
-                        "itemStyle": {"color":"#00C3BB"},
-                        "label": {"show": True, "position": "insideLeft", "formatter": f"{100}% Child",
-                                  "fontSize": 13,
-                                  "color": "#fff"}
-                        },
-                    {
-                        "value": income_loss_child, 
-                        "itemStyle": {"color": "#63295c"},
-                        "label": {"show": True, "position": "insideLeft",
-                                   "formatter": f"{round(income_loss_child / income_loss * 100)}% Child",
-                                   "fontSize": 13,
-                                   "color": "#fff"}
-                        },
-                    {
-                        "value": dalys_child,
-                        "itemStyle": {"color": "#00636b"},
-                        "label": {"show": True, "position": "insideLeft", "formatter": f"{round(dalys_child / dalys * 100)}% Child",
-                                  "fontSize": 13,
-                                  "color": "#fff"}
-                        }
-                    ]
-            },
-        ]
-    }
-
-    st_echarts(
-        options=options_multiple_stacks,
-        height="400px",
-        renderer="svg")
+    st.caption("\* The link between mother-related healthcare costs and untreated perinatal mental health problems has not yet been evidenced.")

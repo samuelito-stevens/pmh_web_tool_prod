@@ -26,8 +26,6 @@ from visualizations import (
     display_cost_overview,
     render_cost_types_piechart,
     render_costs_barchart_2,
-    render_costs_barchart_2_inside_left,
-    render_costs_barchart_2_inside_right
 )
 
 st.set_page_config(
@@ -130,7 +128,7 @@ if parameters:
         #render_cost_types_piechart_2(parameters)
 
         #render_costs_barchart_2(parameters)
-        render_costs_barchart_2_inside_right(parameters)
+        render_costs_barchart_2(parameters)
         #render_costs_barchart_2_inside_left(parameters)
 
 
