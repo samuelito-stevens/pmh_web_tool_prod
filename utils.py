@@ -51,15 +51,15 @@ def format_large_number_long(number: float, currency: str = "$") -> str:
     abs_number = abs(number)
 
     if abs_number >= 1e12:
-        formatted = f"{currency}{abs_number/1e12:.3g} Trillion"
+        formatted = f"{currency} {abs_number/1e12:.3g}T"
     elif abs_number >= 1e9:
-        formatted = f"{currency}{abs_number/1e9:.3g} Billion"
+        formatted = f"{currency} {abs_number/1e9:.3g}B"
     elif abs_number >= 1e6:
-        formatted = f"{currency}{abs_number/1e6:.3g} Million"
+        formatted = f"{currency} {abs_number/1e6:.3g}M"
     elif abs_number >= 1e3:
-        formatted = f"{currency}{abs_number/1e3:.3g} thousand"
+        formatted = f"{currency} {abs_number/1e3:.3g} thousand"
     else:
-        formatted = f"{currency}{abs_number:.3g}"
+        formatted = f"{currency} {abs_number:.3g}"
 
     # Remove trailing zeros after the decimal point
     formatted = formatted.rstrip("0").rstrip(".") if "." in formatted else formatted
@@ -227,7 +227,7 @@ def create_sliders_from_csv(df, currency_symbol, convert_input, conversion_rate)
                             if use_currency_formatting:
                                 col1, col2 = st.columns([0.05, 0.95])
                                 with col1:
-                                    st.markdown(f"<div style='padding-top: 35.5px; padding-left: 0px; font-size: 16px;'>{currency_symbol}</div>", unsafe_allow_html=True)
+                                    st.markdown(f"<div style='padding-top: 35.5px; padding-left: 0px; font-size: 15px;'>{currency_symbol}</div>", unsafe_allow_html=True)
                                 with col2:
                                     display_value = st.number_input(
                                         slider_label,
@@ -264,6 +264,14 @@ def create_sliders_from_csv(df, currency_symbol, convert_input, conversion_rate)
                                     step=float(step),
                                     key=f"{key}_slider",
                                     format="%g%%" if is_percentage else "%g",
+                                )
+
+                            if (row['Display name'] == "GDP per capita"):
+                                st.markdown(
+                                    "<p style='font-size:14px; opacity:0.6; margin-left: 34px;'>"
+                                    "This value also applies to the calculation of quality of life loss for children."
+                                    "</p>",
+                                    unsafe_allow_html=True
                                 )
 
                             # Store the actual value (convert back from percentage if needed)

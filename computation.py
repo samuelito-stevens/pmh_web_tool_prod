@@ -518,7 +518,7 @@ def calculate_income_loss_children(parameters):
             
             results[f"Income loss children outcome {outcome_int} Age {year_int}"] = (
                 (parameters[f"Number of additional children outcome {outcome_int} Age {year_int}"]
-                * parameters[f"Children's impact_Value for productivity loss, in USD_Income decrement {outcome_string}"]
+                * parameters[f"Children's impact_Valuing productivity loss, in USD_Income decrement {outcome_string}"]
                 ) / (parameters["Mothers + children impact_Discounting_Discount rate +1"] ** (year_int))
             )
             results[f"Income loss children outcome {outcome_int}"] += results[f"Income loss children outcome {outcome_int} Age {year_int}"]
@@ -532,7 +532,7 @@ def calculate_healthcare_costs_first_year(parameters):
     for outcome_int in (1, 2, 4, 5, 6, 7, 8):
         results[f"Hospital cost outcome {outcome_int} Age 0 to 1"] = (
             parameters[f"Number of additional children outcome {outcome_int} Age 0 - 1"]
-            * parameters[f"Children's impact_Value for healthcare Age 0-1, in USD_Outcome {outcome_int}"]
+            * parameters[f"Children's impact_Valuing healthcare age 0-1, in USD_Outcome {outcome_int}"]
         )
 
     return results

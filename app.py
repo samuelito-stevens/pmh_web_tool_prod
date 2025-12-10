@@ -90,7 +90,7 @@ st.sidebar.markdown(
 
 # Country input box
 country_name = st.sidebar.text_input(
-    "Enter country name:",
+    "Country name to display:",
     value="Thailand"
 )
 
@@ -101,14 +101,16 @@ display_currency_settings = st.sidebar.toggle("Change currency", value=False)
 
 if display_currency_settings:
     with st.sidebar.expander("**Currency Conversion Settings**", expanded = True):
-        currency_symbol = st.text_input("Currency symbol", value= "$")
-        currency_code = st.text_input("Currency code", value= "USD")
-        conversion_rate = st.number_input("Conversion rate (USD 1.0 = )", min_value=0.0, value= 1.0, step=0.001)
+        # currency_symbol = st.text_input("Currency symbol", value= "$")
+        conversion_rate = st.number_input("Conversion rate for calculations (USD 1.0 = )", min_value=0.0, value= 1.0, step=0.001)
+        currency_code = st.text_input("Currency code to display", value= "USD")
+        currency_symbol = currency_code
         convert_input = True #st.toggle("Convert data input currency")
 else:
     # Default values when toggle is off
-    currency_symbol = "$"
+    # currency_symbol = "$"
     currency_code = "USD"
+    currency_symbol = currency_code
     conversion_rate = 1.0
     convert_input = True
 
