@@ -225,9 +225,9 @@ def create_sliders_from_csv(df, currency_symbol, convert_input, conversion_rate)
                             
                             #with col1:
                             if use_currency_formatting:
-                                col1, col2 = st.columns([0.05, 0.95])
+                                col1, col2 = st.columns([0.08, 0.92])
                                 with col1:
-                                    st.markdown(f"<div style='padding-top: 35.5px; padding-left: 0px; font-size: 15px;'>{currency_symbol}</div>", unsafe_allow_html=True)
+                                    st.markdown(f"<div style='padding-top: 35.5px; padding-left: 0px; font-size: 15px; white-space: nowrap;'>{currency_symbol}</div>", unsafe_allow_html=True)
                                 with col2:
                                     display_value = st.number_input(
                                         slider_label,
