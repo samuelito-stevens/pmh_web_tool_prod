@@ -34,6 +34,17 @@ st.set_page_config(
     layout="wide", 
     initial_sidebar_state="expanded")
 
+st.markdown(
+    """
+    <style>
+    [data-testid="stSidebar"] {
+        max-width: 400px;
+        min-width: 400px;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
 
 @st.cache_data #Prevents this function from executing unless the inputs change (othewise would rerun on every user interaction)
 def perform_computations(
