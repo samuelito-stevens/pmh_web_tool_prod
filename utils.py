@@ -220,26 +220,23 @@ def create_sliders_from_csv(df, currency_symbol, convert_input, conversion_rate)
                             use_text_input = str(row['Text input']).strip().lower() == "yes" 
                             use_currency_formatting = str(row["Unit"]).strip().lower() == "currency"
 
-                                # Create the input control based on mode
+                            # Create the input control based on mode
                             slider_label = f"{row['Display name']}"
-                            
-                            #with col1:
                             if use_currency_formatting:
-                                col1, col2 = st.columns([0.06, 0.94])
-                                with col1:
-                                    st.markdown(f"<div style='padding-top: 35.5px; padding-left: 0px; font-size: 15px; white-space: nowrap;'>{currency_symbol}</div>", unsafe_allow_html=True)
-                                with col2:
-                                    display_value = st.number_input(
-                                        slider_label,
-                                        min_value=float(display_min * conversion_rate if convert_input else display_min),
-                                        max_value=float(display_max * conversion_rate if convert_input else display_max),
-                                        value=float(display_default * conversion_rate if convert_input else display_default),
-                                        step=float(step),
-                                        key=f"{key}_number",
-                                        #disabled=is_disabled,
-                                        #help=tooltip,
-                                        format="%.0f"
-                                    )
+                                slider_label += f" ({currency_symbol})"
+
+                            if use_currency_formatting:
+                                display_value = st.number_input(
+                                    slider_label,
+                                    min_value=float(display_min * conversion_rate if convert_input else display_min),
+                                    max_value=float(display_max * conversion_rate if convert_input else display_max),
+                                    value=float(display_default * conversion_rate if convert_input else display_default),
+                                    step=float(step),
+                                    key=f"{key}_number",
+                                    #disabled=is_disabled,
+                                    #help=tooltip,
+                                    format="%.0f"
+                                )
                             elif use_text_input:
                                 # Use number input for precise values
                                 display_value = st.number_input(
