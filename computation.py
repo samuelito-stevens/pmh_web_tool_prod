@@ -147,18 +147,10 @@ def calculate_women_with_anxiety(parameters):
 
 def calculate_mother_suicide(parameters):
     results = {
-        "Number women committing suicide ante- and postnatal": int(
-            parameters[
-                "Mothers' impact_Years of Life Lost_Suicide rate ante- and postnatal period (per 100,000)"
-            ]
-            * (
-                (
-                    parameters["Number of women antenatal period"]
-                    + parameters["Number of women postnatal period"]
-                )
-                / 100000 
-            )
-        )
+        "Number women committing suicide ante- and postnatal": 
+            parameters["Mothers' impact_Years of Life Lost_Suicide rate ante- and postnatal period (per 100,000)"]
+            * ((parameters["Number of women antenatal period"]
+                + parameters["Number of women postnatal period"]) / 100000 )
     }
 
     return results

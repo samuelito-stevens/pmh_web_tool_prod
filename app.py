@@ -118,9 +118,6 @@ df = load_data()
 parameters = create_sliders_from_csv(df, currency_symbol, convert_input, conversion_rate)
 parameters = perform_computations(parameters, currency_symbol, currency_code, conversion_rate)
 
-# print(parameters["DALYs women, in USD"])
-# print(parameters["Income loss women"])
-# print(parameters["Total cost children"])
 
 if parameters:
 
