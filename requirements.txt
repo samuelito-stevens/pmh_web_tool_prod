@@ -1,3 +1,5 @@
+streamlit
+altair<5
 numpy
 pandas
 plotly
