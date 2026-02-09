@@ -120,7 +120,7 @@ def render_cost_types_piechart(parameters: Dict[str, float]):
                     {"value": hospital_cost,
                         "name": f"Healthcare costs:\n{{bold|{formatted_hospital_cost}}} ({round(hospital_cost / total_cost * 100)}%)",
                         "tooltip": {
-                            "formatter": f"<div style='max-width: 300px; white-space: normal; word-wrap: break-word; overflow-wrap: break-word;'><b>Hospital costs: {round(hospital_cost / total_cost * 100)}%</b><br/>Value: {parameters["currency_symbol"]}{hospital_cost:,}<br/><b>100%</b> of these costs are associated with the child.<br/>"
+                            "formatter": f"<div style='max-width: 300px; white-space: normal; word-wrap: break-word; overflow-wrap: break-word;'><b>Hospital costs: {round(hospital_cost / total_cost * 100)}%</b><br/>Value: {parameters['currency_symbol']}{hospital_cost:,}<br/><b>100%</b> of these costs are associated with the child.<br/>"
                         },
                         "itemStyle": {
                             "color": "#00C3BB"
