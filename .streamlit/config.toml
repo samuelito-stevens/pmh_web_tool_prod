@@ -1,4 +1,2 @@
 [theme]
 base = "light"
-[theme.sidebar]
-redColor = "#8B0003"

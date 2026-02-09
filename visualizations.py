@@ -102,7 +102,7 @@ def render_cost_types_piechart(parameters: Dict[str, float]):
                     {"value": dalys,
                         "name": f"Quality of life losses:\n{{bold|{formatted_dalys}}} ({round(dalys / total_cost * 100)}%)",
                         "tooltip": {
-                            "formatter": f"<div style='max-width: 10px; white-space: normal; word-wrap: break-word; overflow-wrap: break-word;'><b>DALYs: {round(dalys / total_cost * 100)}%</b><br/>Value: {parameters["currency_symbol"]}{dalys:,}<br/><b>{round(dalys_mother / dalys * 100)}%</b> of these costs are associated with the mother and <b>{round(dalys_child / dalys * 100)}%</b> with the child.<br/>"
+                            "formatter": f"<div style='max-width: 10px; white-space: normal; word-wrap: break-word; overflow-wrap: break-word;'><b>DALYs: {round(dalys / total_cost * 100)}%</b><br/>Value: {parameters['currency_symbol']}{dalys:,}<br/><b>{round(dalys_mother / dalys * 100)}%</b> of these costs are associated with the mother and <b>{round(dalys_child / dalys * 100)}%</b> with the child.<br/>"
                         },
                         "itemStyle": {
                             "color": "#00636b"
@@ -111,7 +111,7 @@ def render_cost_types_piechart(parameters: Dict[str, float]):
                     {"value": income_loss, 
                         "name": f"Productivity losses:\n{{bold|{formatted_income_loss}}} ({round(income_loss / total_cost * 100)}%)",
                         "tooltip": {
-                            "formatter": f"<div style='max-width: 300px; white-space: normal; word-wrap: break-word; overflow-wrap: break-word;'><b>Income loss: {round(income_loss / total_cost * 100)}%</b><br/>Value: {parameters["currency_symbol"]}{income_loss:,}<br/><b>{round(income_loss_mother / income_loss * 100)}%</b> of these costs are associated with the mother and <b>{round(income_loss_child / income_loss * 100)}%</b> with the child.<br/>"
+                            "formatter": f"<div style='max-width: 300px; white-space: normal; word-wrap: break-word; overflow-wrap: break-word;'><b>Income loss: {round(income_loss / total_cost * 100)}%</b><br/>Value: {parameters['currency_symbol']}{income_loss:,}<br/><b>{round(income_loss_mother / income_loss * 100)}%</b> of these costs are associated with the mother and <b>{round(income_loss_child / income_loss * 100)}%</b> with the child.<br/>"
                         },
                         "itemStyle": {
                             "color": "#63295c"
