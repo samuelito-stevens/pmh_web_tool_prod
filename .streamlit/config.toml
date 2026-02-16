@@ -1,2 +1,5 @@
 [theme]
 base = "light"
+
+[ui]
+sidebarWidth = 400
