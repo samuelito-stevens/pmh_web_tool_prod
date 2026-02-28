@@ -251,7 +251,6 @@ def create_sliders_from_csv(df, currency_symbol, convert_input, conversion_rate)
                                     format="%g"
                                 )
                             else:
-
                                 # Use slider for visual adjustment
                                 display_value = st.slider(
                                     slider_label,
@@ -260,7 +259,7 @@ def create_sliders_from_csv(df, currency_symbol, convert_input, conversion_rate)
                                     value=float(display_default),
                                     step=float(step),
                                     key=f"{key}_slider",
-                                    format="%g%%" if is_percentage else "%g",
+                                    format="%.1f%%" if is_percentage else "%g",
                                 )
 
                             if (row['Display name'] == "GDP per capita"):
