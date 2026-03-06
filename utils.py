@@ -190,21 +190,26 @@ def create_sliders_from_csv(df, currency_symbol, convert_input, conversion_rate)
                             # Check if it's a percentage
                             is_percentage = str(row["Unit"]).lower().strip() == "percentage"
 
-                            # Determine appropriate step size
-                            if is_percentage:
-                                step = 0.1  # 0.1% steps for percentages
-                            elif abs(max_value) < 0.01:
-                                step = 0.00001  # Smaller steps for small values
-                            elif abs(max_value) < 0.1:
-                                step = 0.0001 
-                            elif abs(max_value) < 1:
-                                step = 0.001 
-                            elif abs(max_value) < 10:
-                                step = 0.01
-                            elif abs(max_value) > 100:
-                                step = 1
+                            try:
+                                step_size = float(row["Step Size"])
+                            except (ValueError, KeyError, TypeError) as e:
+                                st.warning(f"Invalid value for {row['Variable name']} step size")
+
+                            # Determine appropriate number formatting
+                            if step_size == 1:
+                                number_format = "%g"
+                            elif step_size == 0.1:
+                                number_format = "%.1f"
+                            elif step_size == 0.01:
+                                number_format = "%.2f"
+                            elif step_size == 0.001:
+                                number_format = "%.3f"
+                            elif step_size == 0.0001:
+                                number_format = "%.4f"
+                            elif step_size == 0.00001:
+                                number_format = "%.5f"
                             else:
-                                step = 0.1
+                                number_format = "%g"
 
                             # Create informative tooltip
                             #tooltip = f"{row["Tooltip"]}"
@@ -231,7 +236,7 @@ def create_sliders_from_csv(df, currency_symbol, convert_input, conversion_rate)
                                     min_value=float(display_min * conversion_rate if convert_input else display_min),
                                     max_value=float(display_max * conversion_rate if convert_input else display_max),
                                     value=float(display_default * conversion_rate if convert_input else display_default),
-                                    step=float(step),
+                                    step=step_size,
                                     key=f"{key}_number",
                                     #disabled=is_disabled,
                                     #help=tooltip,
@@ -244,11 +249,11 @@ def create_sliders_from_csv(df, currency_symbol, convert_input, conversion_rate)
                                     min_value=float(display_min),
                                     max_value=float(display_max),
                                     value=float(display_default),
-                                    step=float(step),
+                                    step=step_size,
                                     key=f"{key}_number",
                                     #disabled=is_disabled,
                                     #help=tooltip,
-                                    format="%g"
+                                    format = number_format
                                 )
                             else:
                                 # Use slider for visual adjustment
@@ -257,11 +262,10 @@ def create_sliders_from_csv(df, currency_symbol, convert_input, conversion_rate)
                                     min_value=float(display_min),
                                     max_value=float(display_max),
                                     value=float(display_default),
-                                    step=float(step),
+                                    step=step_size,
                                     key=f"{key}_slider",
-                                    format="%.1f%%" if is_percentage else "%g",
+                                    format= number_format,
                                 )
-
                             if (row['Display name'] == "GDP per capita"):
                                 st.markdown(
                                     "<p style='font-size:14px; opacity:0.6; margin-left: 34px;'>"
